@@ -6,7 +6,7 @@
  */
 
 // Đặt true khi sự kiện đã đóng để ngừng tiếp nhận đăng ký mới
-var EVENT_CLOSED = true;
+var EVENT_CLOSED = false;
 var EVENT_CLOSED_MESSAGE = "Sự kiện đã đóng và kết thúc, hệ thống không còn tiếp nhận đăng ký mới.";
 
 // Hàm khởi tạo tiêu đề cột nếu sheet còn trống (Có thể bấm "Chạy" trực tiếp trong Apps Script)
