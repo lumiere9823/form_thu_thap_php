@@ -1,13 +1,13 @@
 {
-  "name": "web-thu-thap",
+  "name": "formthongtin",
   "version": "2.0.0",
   "type": "module",
-  "description": "Form thu thập thông tin người dùng Serverless trên Cloudflare Pages & Google Sheets",
+  "description": "Form thu thập thông tin người dùng Serverless trên Cloudflare Workers & Google Sheets",
   "scripts": {
-    "dev": "wrangler pages dev .",
-    "deploy": "wrangler pages deploy ."
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
   },
   "devDependencies": {
-    "wrangler": "^3.114.0"
+    "wrangler": "^3.114.17"
   }
 }
