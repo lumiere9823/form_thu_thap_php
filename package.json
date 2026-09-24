@@ -1,0 +1,13 @@
+{
+  "name": "web-thu-thap",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Form thu thập thông tin người dùng Serverless trên Cloudflare Pages & Google Sheets",
+  "scripts": {
+    "dev": "wrangler pages dev .",
+    "deploy": "wrangler pages deploy ."
+  },
+  "devDependencies": {
+    "wrangler": "^3.114.0"
+  }
+}

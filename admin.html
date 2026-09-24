@@ -202,10 +202,12 @@
         </div>
       </div>
 
-      <!-- Trạng thái Webhook hiện tại -->
+      <!-- Trạng thái hiện tại -->
       <div class="current-webhook-box">
-        <span class="label">Webhook đang kích hoạt hiện tại:</span>
-        <div class="value" id="currentWebhookDisplay">Đang tải...</div>
+        <span class="label">Webhook đang kích hoạt:</span>
+        <div class="value" id="currentWebhookDisplay" style="margin-bottom: 0.75rem;">Đang tải...</div>
+        <span class="label">Ảnh nền đang áp dụng:</span>
+        <div class="value" id="currentBgDisplay" style="color: var(--accent-cyan); font-size: 0.82rem;">Mặc định (Không dùng ảnh)</div>
       </div>
 
       <!-- Alert thông báo lỗi/thành công -->
@@ -223,7 +225,7 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
-        <span id="adminAlertSuccessText">Lưu Webhook thành công!</span>
+        <span id="adminAlertSuccessText">Lưu cấu hình thành công!</span>
       </div>
 
       <form id="adminForm" class="lead-form" novalidate>
@@ -231,17 +233,60 @@
         <!-- Trường 1: Webhook URL -->
         <div class="form-group" id="groupWebhookUrl">
           <label for="webhookInput" class="field-label">
-            <span>Đường dẫn Webhook Google Apps Script <span class="required-mark">*</span></span>
+            <span>Đường dẫn Webhook Google Apps Script</span>
             <span class="label-hint">https://script.google.com/.../exec</span>
           </label>
           <div class="input-wrap">
             <input type="url" id="webhookInput" class="form-control"
-              placeholder="https://script.google.com/macros/s/AKfycb.../exec" required>
+              placeholder="https://script.google.com/macros/s/.../exec">
             <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
               <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
             </svg>
+          </div>
+        </div>
+
+        <!-- Trường 2: Shared Secret -->
+        <div class="form-group" id="groupSecret">
+          <label for="secretInput" class="field-label">
+            <span>Mã bí mật đối soát (Shared Secret)</span>
+            <span class="label-hint">Trùng với SHARED_SECRET trong Google Apps Script</span>
+          </label>
+          <div class="input-wrap">
+            <input type="password" id="secretInput" class="form-control"
+              placeholder="Nhập chuỗi khóa bí mật mới (nếu muốn cập nhật)">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Trường 2: Background Image URL (Mới) -->
+        <div class="form-group" id="groupBgImage">
+          <label for="bgImageInput" class="field-label">
+            <span>Đường dẫn ảnh nền trang web (URL)</span>
+            <span class="label-hint">Link ảnh trực tiếp https://... (Để trống nếu dùng màu mặc định)</span>
+          </label>
+          <div class="input-wrap">
+            <input type="url" id="bgImageInput" class="form-control"
+              placeholder="https://example.com/background.jpg (hoặc link ảnh Imgur, Cloudinary)">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+          </div>
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.4rem;">
+            <button type="button" class="btn-ghost-sm" id="btnPreviewBg" style="font-size: 0.78rem; padding: 0.3rem 0.75rem;">
+              Xem trước nền này
+            </button>
+            <button type="button" class="btn-ghost-sm" id="btnClearBg" style="font-size: 0.78rem; padding: 0.3rem 0.75rem; color: #f87171; border-color: rgba(239, 68, 68, 0.3);">
+              Xóa ảnh nền
+            </button>
           </div>
         </div>
 
@@ -270,11 +315,16 @@
         </div>
 
         <!-- Nút bấm -->
-        <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
-          <button type="submit" class="btn-submit" id="btnSaveWebhook" style="flex: 1;">
+        <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem; flex-wrap: wrap;">
+          <button type="submit" class="btn-submit" id="btnSaveConfig" style="flex: 1; min-width: 200px;">
             <span class="btn-spinner"></span>
-            <span class="btn-text-default">Xác Thực & Lưu Webhook</span>
+            <span class="btn-text-default">Xác Thực & Lưu Cấu Hình</span>
             <span class="btn-text-loading" style="display:none;">Đang đối soát...</span>
+          </button>
+
+          <button type="button" class="btn-ghost-sm" id="btnLoadCurrentConfig"
+            style="border-radius: var(--radius-md); padding: 0 1.25rem;">
+            Tải cấu hình hiện tại
           </button>
 
           <button type="button" class="btn-ghost-sm" id="btnTestCurrentWebhook"
@@ -294,12 +344,12 @@
 
       <!-- Khung hướng dẫn xác thực -->
       <div class="info-callout">
-        <p><strong>Cơ chế xác thực:</strong></p>
+        <p><strong>Cơ chế xác thực & Serverless:</strong></p>
         <p style="margin-top: 0.25rem;">
-          Mật khẩu được cấu hình trực tiếp trong <code>config.php</code> trên máy chủ.
+          Tất cả cấu hình (Webhook, Secret, Ảnh nền, Mật khẩu) được lưu trữ tập trung qua <code>Cloudflare KV</code> hoặc <code>Variables and Secrets</code> trên Cloudflare Pages.
         </p>
         <p style="margin-top: 0.25rem;">
-          Hệ thống hỗ trợ chuỗi băm PHP (Argon2id/bcrypt) và định dạng scrypt cũ của bản Node.js.
+          Tuyệt đối không lưu mật khẩu hay secret ở mã nguồn công khai.
         </p>
       </div>
 
@@ -317,69 +367,195 @@
   </div>
 
   <script>
-    // Logic quản trị độc lập trên trang admin.html
-    // Không lưu URL webhook ở trình duyệt (localStorage là bộ nhớ vĩnh viễn, xem được qua DevTools).
-    function refreshCurrentWebhookDisplay() {
-      const displayEl = document.getElementById('currentWebhookDisplay');
-      displayEl.textContent = 'Nhập URL webhook mới bên dưới để cập nhật.';
-      displayEl.style.color = '#f59e0b';
-    }
-
-    // Toggle ẩn/hiện mật khẩu
+    // Logic quản trị bảo mật trên trang admin.html
+    const bgInput = document.getElementById('bgImageInput');
+    const webhookInput = document.getElementById('webhookInput');
+    const secretInput = document.getElementById('secretInput');
     const pwdInput = document.getElementById('adminPasswordInput');
+    const currentWebhookDisplay = document.getElementById('currentWebhookDisplay');
+    const currentBgDisplay = document.getElementById('currentBgDisplay');
+    const btnPreview = document.getElementById('btnPreviewBg');
+    const btnClearBg = document.getElementById('btnClearBg');
+    const btnLoadConfig = document.getElementById('btnLoadCurrentConfig');
     const toggleBtn = document.getElementById('btnTogglePwd');
-    toggleBtn.addEventListener('click', () => {
-      if (pwdInput.type === 'password') {
-        pwdInput.type = 'text';
-      } else {
-        pwdInput.type = 'password';
-      }
-    });
-
-    // Xử lý nộp form lưu Webhook
     const form = document.getElementById('adminForm');
     const alertErr = document.getElementById('adminAlertError');
     const alertErrText = document.getElementById('adminAlertErrorText');
     const alertSucc = document.getElementById('adminAlertSuccess');
     const alertSuccText = document.getElementById('adminAlertSuccessText');
 
+    // Tải cấu hình công khai ban đầu (chỉ ảnh nền)
+    async function loadPublicBg() {
+      try {
+        const res = await fetch('/api/config');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.bgImageUrl) {
+            currentBgDisplay.innerHTML = `<a href="${data.bgImageUrl}" target="_blank" style="color: #38bdf8; text-decoration: underline; word-break: break-all;">${data.bgImageUrl}</a>`;
+            if (!bgInput.value) bgInput.value = data.bgImageUrl;
+            document.body.style.backgroundImage = `url("${data.bgImageUrl}")`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
+          }
+        }
+      } catch (_) {}
+      currentWebhookDisplay.textContent = 'Nhập mật khẩu quản trị và bấm "Tải cấu hình hiện tại" để kiểm tra.';
+      currentWebhookDisplay.style.color = '#f59e0b';
+    }
+
+    // Tải cấu hình đầy đủ (yêu cầu mật khẩu xác thực)
+    async function loadSecureStatus(pwd) {
+      if (!pwd) {
+        alertErr.style.display = 'flex';
+        alertErrText.textContent = 'Vui lòng nhập mật khẩu quản trị để xem cấu hình!';
+        pwdInput.focus();
+        return;
+      }
+
+      alertErr.style.display = 'none';
+      alertSucc.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'get_status', password: pwd })
+        });
+        const data = await res.json();
+        if (!res.ok || data.status !== 'success') {
+          throw new Error(data.message || 'Mật khẩu không chính xác.');
+        }
+
+        currentWebhookDisplay.textContent = data.activeWebhookUrl || 'Chưa thiết lập';
+        currentWebhookDisplay.style.color = '#10b981';
+
+        if (data.bgImageUrl) {
+          currentBgDisplay.innerHTML = `<a href="${data.bgImageUrl}" target="_blank" style="color: #38bdf8; text-decoration: underline; word-break: break-all;">${data.bgImageUrl}</a>`;
+          bgInput.value = data.bgImageUrl;
+          document.body.style.backgroundImage = `url("${data.bgImageUrl}")`;
+          document.body.style.backgroundSize = 'cover';
+          document.body.style.backgroundPosition = 'center';
+        } else {
+          currentBgDisplay.textContent = 'Mặc định (Không dùng ảnh)';
+        }
+
+        alertSucc.style.display = 'flex';
+        alertSuccText.textContent = 'Đã tải thông tin cấu hình từ máy chủ thành công!';
+      } catch (err) {
+        alertErr.style.display = 'flex';
+        alertErrText.textContent = err.message;
+      }
+    }
+
+    btnLoadConfig.addEventListener('click', () => {
+      loadSecureStatus(pwdInput.value.trim());
+    });
+
+    function normalizeImageUrl(url) {
+      if (!url || typeof url !== 'string') return '';
+      url = url.trim();
+      const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (driveMatch && (url.includes('drive.google.com') || url.includes('docs.google.com'))) {
+        return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+      }
+      return url;
+    }
+
+    bgInput.addEventListener('change', () => {
+      const direct = normalizeImageUrl(bgInput.value);
+      if (direct !== bgInput.value) {
+        bgInput.value = direct;
+      }
+    });
+
+    // Nút xem trước ảnh nền
+    btnPreview.addEventListener('click', () => {
+      let url = bgInput.value.trim();
+      if (!url) {
+        alert('Vui lòng nhập đường dẫn URL ảnh trước khi xem trước!');
+        return;
+      }
+      const directUrl = normalizeImageUrl(url);
+      if (directUrl !== url) {
+        bgInput.value = directUrl;
+        url = directUrl;
+      }
+      document.body.style.backgroundImage = `url("${url}")`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+    });
+
+    // Nút xóa ảnh nền
+    btnClearBg.addEventListener('click', () => {
+      bgInput.value = '';
+      document.body.style.backgroundImage = '';
+    });
+
+    // Toggle ẩn/hiện mật khẩu
+    toggleBtn.addEventListener('click', () => {
+      pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
+    });
+
+    // Xử lý nộp form lưu cấu hình
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       alertErr.style.display = 'none';
       alertSucc.style.display = 'none';
 
-      const webhookVal = document.getElementById('webhookInput').value.trim();
+      const webhookVal = webhookInput.value.trim();
+      const secretVal = secretInput.value.trim();
+      const bgVal = bgInput.value.trim();
       const pwdVal = pwdInput.value.trim();
 
-      if (!webhookVal || !webhookVal.startsWith('http')) {
+      if (!webhookVal && !bgVal && !secretVal) {
         alertErr.style.display = 'flex';
-        alertErrText.textContent = 'Vui lòng nhập đường dẫn URL Webhook hợp lệ (bắt đầu bằng https://)!';
+        alertErrText.textContent = 'Vui lòng nhập ít nhất một thông tin (Webhook, Secret hoặc Ảnh nền) để cập nhật!';
+        return;
+      }
+
+      if (webhookVal && !webhookVal.startsWith('http')) {
+        alertErr.style.display = 'flex';
+        alertErrText.textContent = 'URL Webhook không hợp lệ (phải bắt đầu bằng https://)!';
         return;
       }
 
       if (!pwdVal) {
         alertErr.style.display = 'flex';
         alertErrText.textContent = 'Vui lòng nhập mật khẩu quản trị!';
+        pwdInput.focus();
         return;
       }
 
       try {
-        const response = await fetch('/api/save-webhook.php', {
+        const response = await fetch('/api/config', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ webhookUrl: webhookVal, password: pwdVal })
+          body: JSON.stringify({
+            webhookUrl: webhookVal,
+            sharedSecret: secretVal,
+            bgImageUrl: bgVal,
+            password: pwdVal
+          })
         });
-        if (!response.ok) throw new Error('Mật khẩu không chính xác hoặc server chưa được bật');
+        const resData = await response.json();
+        if (!response.ok || resData.status !== 'success') {
+          throw new Error(resData.message || 'Mật khẩu không chính xác hoặc lỗi hệ thống');
+        }
+
+        alertSucc.style.display = 'flex';
+        alertSuccText.textContent = resData.message || 'Lưu cấu hình thành công!';
+
+        if (bgVal) {
+          localStorage.setItem('app_bg_image_url', bgVal);
+        } else {
+          localStorage.removeItem('app_bg_image_url');
+        }
+
+        loadSecureStatus(pwdVal);
       } catch (e) {
         alertErr.style.display = 'flex';
         alertErrText.textContent = e.message;
-        return;
       }
-
-      alertSucc.style.display = 'flex';
-      alertSuccText.textContent = 'Xác thực thành công! Webhook đã được lưu vào config.php trên máy chủ.';
-      pwdInput.value = '';
-      refreshCurrentWebhookDisplay();
     });
 
     // Nút kiểm tra kết nối Webhook hiện tại (GET)
@@ -453,7 +629,7 @@
     });
 
     document.addEventListener('DOMContentLoaded', async () => {
-      refreshCurrentWebhookDisplay();
+      loadPublicBg();
     });
   </script>
 </body>

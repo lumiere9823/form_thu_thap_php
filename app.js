@@ -110,9 +110,9 @@ function validateForm() {
 // ==========================================
 async function sendToGoogleSheet(payload) {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 20000); // > timeout webhook phía PHP (12s) + độ trễ mạng
+  const timeoutId = setTimeout(() => controller.abort(), 20000);
   try {
-    const response = await fetch('/api/submit.php', {
+    const response = await fetch('/api/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -120,7 +120,7 @@ async function sendToGoogleSheet(payload) {
       cache: 'no-store'
     });
     const result = await response.json();
-    if (!response.ok || result.status === 'error') {
+    if (!response.ok || result.status !== 'success') {
       throw new Error(result.message || 'Không thể lưu thông tin.');
     }
 
@@ -206,3 +206,52 @@ if (DOM.modalSuccess) {
     }
   });
 }
+
+// ==========================================
+// CẤU HÌNH ẢNH NỀN TÙY CHỈNH (KHÔNG CẦN BACK.PNG)
+// ==========================================
+function normalizeImageUrl(url) {
+  if (!url || typeof url !== 'string') return '';
+  url = url.trim();
+  const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (driveMatch && (url.includes('drive.google.com') || url.includes('docs.google.com'))) {
+    return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+  }
+  return url;
+}
+
+function applyBackgroundImage(url) {
+  url = normalizeImageUrl(url);
+  if (!url) return;
+  document.documentElement.style.setProperty('--custom-bg-image', `url("${url}")`);
+  document.body.style.backgroundImage = `url("${url}")`;
+  const dialog = document.querySelector('.success-dialog');
+  if (dialog) dialog.style.backgroundImage = `url("${url}")`;
+}
+
+async function initBackground() {
+  const cachedBg = localStorage.getItem('app_bg_image_url');
+  if (cachedBg) {
+    applyBackgroundImage(cachedBg);
+  }
+
+  try {
+    const res = await fetch('/api/config', { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.bgImageUrl) {
+        if (data.bgImageUrl !== cachedBg) {
+          localStorage.setItem('app_bg_image_url', data.bgImageUrl);
+          applyBackgroundImage(data.bgImageUrl);
+        }
+      } else if (cachedBg) {
+        localStorage.removeItem('app_bg_image_url');
+        document.documentElement.style.removeProperty('--custom-bg-image');
+        document.body.style.backgroundImage = '';
+      }
+    }
+  } catch (_) {}
+}
+
+initBackground();
+

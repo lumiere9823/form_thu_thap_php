@@ -54,10 +54,11 @@ html {
 body {
   font-family: var(--font-family);
   background-color: var(--bg-primary);
-  background-image: url('back.png');
+  background-image: var(--custom-bg-image, radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 60%, #020617 100%));
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+  background-repeat: no-repeat;
   color: var(--text-main);
   line-height: 1.6;
   min-height: 100vh;
@@ -686,7 +687,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .success-dialog {
-  background: url('back.png') center bottom / cover no-repeat;
+  background-color: #0f172a;
+  background-image: var(--custom-bg-image, radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 60%, #020617 100%));
+  background-position: center bottom;
+  background-size: cover;
+  background-repeat: no-repeat;
   border-color: rgba(255, 255, 255, 0.8);
   color: #17324d;
   box-shadow: 0 24px 60px rgba(6, 31, 65, 0.3);
