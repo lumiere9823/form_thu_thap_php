@@ -18,6 +18,7 @@ export async function onRequestGet({ env }) {
     JSON.stringify({
       status: 'success',
       bgImageUrl: normalizeImageUrl(rawBg),
+      debugKeys: Object.keys(env || {}),
     }),
     {
       headers: {
