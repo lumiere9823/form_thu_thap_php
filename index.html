@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký thông tin</title>
+    <meta name="description" content="Biểu mẫu đăng ký thông tin khách hàng và CBNV Nam A Bank.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="bg-glow-top"></div>
+    <div class="bg-pattern-grid"></div>
+
+    <main class="hero-section">
+        <div class="container hero-grid">
+            <section class="hero-content">
+                <h1 class="hero-title">Đăng ký thông tin</h1>
+                <p class="hero-desc">Vui lòng điền đầy đủ thông tin để hoàn tất đăng ký cho Minigame
+                    "KHÉO TAY GẮN KẾT – VUI TẾT ĐOÀN VIÊN" của Nam A Bank.</p>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="feature-icon-box" aria-hidden="true">✓</div>
+                        <div class="feature-info">
+                            <h4>Thông tin được tiếp nhận</h4>
+                            <p>Dữ liệu của bạn được tiếp nhận và sử dụng cho chương trình đăng ký.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon-box" aria-hidden="true">◆</div>
+                        <div class="feature-info">
+                            <h4>Tham gia chương trình</h4>
+                            <p>Chọn đúng nhóm đối tượng để thông tin được ghi nhận chính xác.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon-box" aria-hidden="true">N</div>
+                        <div class="feature-info">
+                            <h4>BTC Minigame "KHÉO TAY GẮN KẾT – VUI TẾT ĐOÀN VIÊN"</h4>
+                            <p>Cảm ơn bạn đã dành thời gian tham gia và cung cấp thông tin. Chúc bạn và gia đình có một
+                                Tết Đoàn Viên ấm áp bên gia đình và người thân.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="form-container">
+                <div class="form-card">
+                    <div class="form-header">
+                        <h2 class="form-title">Thông tin đăng ký</h2>
+                        <p class="form-subtitle">Các trường có dấu <span class="required-mark">*</span> là bắt buộc</p>
+                    </div>
+                    <div class="form-alert alert-error" id="formAlertError" role="alert"><span
+                            id="formAlertErrorMsg">Vui lòng kiểm tra lại các trường thông tin.</span></div>
+                    <form id="leadCaptureForm" class="lead-form" novalidate>
+                        <div class="form-group" id="groupFullName">
+                            <label for="fullName" class="field-label"><span>Họ và tên <span
+                                        class="required-mark">*</span></span></label>
+                            <div class="input-wrap"><input type="text" id="fullName" name="fullName"
+                                    class="form-control" placeholder="Nhập họ và tên" autocomplete="name"
+                                    maxlength="120" required></div>
+                            <div class="error-msg" id="errFullName"><span>Vui lòng nhập họ và tên của bạn.</span></div>
+                        </div>
+                        <div class="form-group" id="groupPhone">
+                            <label for="phone" class="field-label"><span>Số điện thoại <span
+                                        class="required-mark">*</span></span></label>
+                            <div class="input-wrap"><input type="tel" id="phone" name="phone" class="form-control"
+                                    placeholder="Nhập số điện thoại" autocomplete="tel" maxlength="20" required></div>
+                            <div class="error-msg" id="errPhone"><span>Vui lòng nhập số điện thoại hợp lệ.</span></div>
+                        </div>
+                        <div class="form-group" id="groupAddress">
+                            <label for="address" class="field-label"><span>Địa chỉ <span
+                                        class="required-mark">*</span></span></label>
+                            <div class="input-wrap"><input type="text" id="address" name="address" class="form-control"
+                                    placeholder="Nhập địa chỉ" autocomplete="street-address" maxlength="250" required>
+                            </div>
+                            <div class="error-msg" id="errAddress"><span>Vui lòng nhập địa chỉ.</span></div>
+                        </div>
+                        <div class="form-group" id="groupFacebook">
+                            <label for="facebookName" class="field-label"><span>Tên Facebook <span
+                                        class="required-mark">*</span></span></label>
+                            <div class="input-wrap"><input type="text" id="facebookName" name="facebookName" class="form-control"
+                                    placeholder="Nhập tên Facebook" maxlength="120" required></div>
+                            <div class="error-msg" id="errFacebook"><span>Vui lòng nhập tên Facebook.</span>
+                            </div>
+                        </div>
+                        <div class="form-group" id="groupLuckyNumber">
+                            <label for="luckyNumber" class="field-label"><span>Số may mắn <span
+                                        class="required-mark">*</span></span></label>
+                            <div class="input-wrap"><input type="number" id="luckyNumber" name="luckyNumber"
+                                    class="form-control" placeholder="Nhập số may mắn" min="0" max="999999999999"
+                                    required></div>
+                            <div class="error-msg" id="errLuckyNumber"><span>Vui lòng nhập số may mắn.</span></div>
+                        </div>
+                        <div class="form-group" id="groupMemberType">
+                            <span class="field-label"><span>Bạn là <span class="required-mark">*</span></span></span>
+                            <div class="choice-list"><label class="choice-item"><input type="radio" name="memberType"
+                                        value="Khách hàng" required><span>Khách hàng</span></label><label
+                                    class="choice-item"><input type="radio" name="memberType"
+                                        value="CBNV Nam A Bank"><span>CBNV Nam A Bank</span></label></div>
+                            <div class="error-msg" id="errMemberType"><span>Vui lòng chọn một đáp án.</span></div>
+                        </div>
+                        <button type="submit" class="btn-submit" id="btnSubmit"><span class="btn-spinner"></span><span
+                                class="btn-text-default">Hoàn tất đăng ký <span aria-hidden="true">→</span></span><span
+                                class="btn-text-loading" style="display:none;">Đang gửi thông tin...</span></button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="modalSuccess" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-dialog success-dialog"><button type="button" class="modal-close" id="btnCloseSuccess"
+                aria-label="Đóng">×</button>
+            <div class="success-icon-wrap">✓</div>
+            <div class="modal-header-center">
+                <h3>Đăng ký thành công!</h3>
+                <p>Cảm ơn bạn đã gửi thông tin.</p>
+            </div>
+            <div class="submission-summary">
+                <div class="summary-row"><span class="label">Họ và tên:</span><span class="val"
+                        id="sumFullName">-</span></div>
+                <div class="summary-row"><span class="label">Số điện thoại:</span><span class="val"
+                        id="sumPhone">-</span></div>
+                <div class="summary-row"><span class="label">Địa chỉ:</span><span class="val" id="sumAddress">-</span>
+                </div>
+                <div class="summary-row"><span class="label">Tên Facebook:</span><span class="val" id="sumFacebook">-</span>
+                </div>
+                <div class="summary-row"><span class="label">Số may mắn:</span><span class="val"
+                        id="sumLuckyNumber">-</span></div>
+                <div class="summary-row"><span class="label">Bạn là:</span><span class="val" id="sumMemberType">-</span>
+                </div>
+            </div><button type="button" class="btn-submit" id="btnContinue">Hoàn tất & đóng</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
