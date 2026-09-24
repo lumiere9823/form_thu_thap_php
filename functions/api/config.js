@@ -9,9 +9,11 @@ function normalizeImageUrl(url) {
   return url;
 }
 
+const DEFAULT_BG_IMAGE_URL = 'https://lh3.googleusercontent.com/d/1Ler6x8p96gZ7T0eeX6oMQofbEWNEgEge';
+
 // GET: Cung cấp URL ảnh nền cấu hình từ biến môi trường cho giao diện người dùng
 export async function onRequestGet({ env }) {
-  const rawBg = env?.BACKGROUND_IMAGE_URL || env?.BG_IMAGE_URL || '';
+  const rawBg = env?.BACKGROUND_IMAGE_URL || env?.BG_IMAGE_URL || DEFAULT_BG_IMAGE_URL;
   return new Response(
     JSON.stringify({
       status: 'success',

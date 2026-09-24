@@ -54,7 +54,7 @@ html {
 body {
   font-family: var(--font-family);
   background-color: var(--bg-primary);
-  background-image: var(--custom-bg-image, radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 60%, #020617 100%));
+  background-image: var(--custom-bg-image, url("https://lh3.googleusercontent.com/d/1Ler6x8p96gZ7T0eeX6oMQofbEWNEgEge"));
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -688,7 +688,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .success-dialog {
   background-color: #0f172a;
-  background-image: var(--custom-bg-image, radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 60%, #020617 100%));
+  background-image: var(--custom-bg-image, url("https://lh3.googleusercontent.com/d/1Ler6x8p96gZ7T0eeX6oMQofbEWNEgEge"));
   background-position: center bottom;
   background-size: cover;
   background-repeat: no-repeat;

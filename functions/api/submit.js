@@ -35,12 +35,15 @@ export async function onRequestPost({ request, env }) {
   if (!webhookUrl && env?.GOOGLE_SHEET_WEBHOOK_URL) {
     webhookUrl = env.GOOGLE_SHEET_WEBHOOK_URL.trim();
   }
+  if (!webhookUrl && env?.GOOGLE_SHEET_WEBHOOK) {
+    webhookUrl = env.GOOGLE_SHEET_WEBHOOK.trim();
+  }
 
   if (!webhookUrl) {
     return new Response(
       JSON.stringify({
         status: 'error',
-        message: 'Hệ thống chưa được cấu hình Webhook URL. Vui lòng thiết lập biến môi trường hoặc cấu hình trong trang Admin.'
+        message: 'Hệ thống chưa được cấu hình Webhook URL. Vui lòng thiết lập biến GOOGLE_SHEET_WEBHOOK_URL trong Cloudflare Settings > Variables and Secrets.'
       }),
       { status: 500, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
     );
@@ -54,6 +57,9 @@ export async function onRequestPost({ request, env }) {
   }
   if (!sharedSecret && env?.GOOGLE_SHEET_SHARED_SECRET) {
     sharedSecret = env.GOOGLE_SHEET_SHARED_SECRET.trim();
+  }
+  if (!sharedSecret && env?.GOOGLE_SHEET_SHARED_S) {
+    sharedSecret = env.GOOGLE_SHEET_SHARED_S.trim();
   }
 
   // Validate webhook URL format
