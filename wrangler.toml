@@ -9,3 +9,9 @@ binding = "ASSETS"
 
 [vars]
 BACKGROUND_IMAGE_URL = "https://lh3.googleusercontent.com/d/1Ler6x8p96gZ7T0eeX6oMQofbEWNEgEge"
+
+# Cấu hình thời gian diễn ra sự kiện (Định dạng: DD/MM/YYYY hoặc YYYY-MM-DD)
+# Bắt đầu từ 12/10/2026 đến hết ngày 16/10/2026.
+# LƯU Ý: Nếu để trống ("") hoặc xóa 2 dòng này, hệ thống sẽ mở nhận đăng ký mãi mãi không giới hạn.
+EVENT_START_DATE = "12/10/2026"
+EVENT_END_DATE = "16/10/2026"

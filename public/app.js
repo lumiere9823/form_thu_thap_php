@@ -17,6 +17,8 @@ const DOM = {
   btnSubmit: document.getElementById('btnSubmit'),
   formAlertError: document.getElementById('formAlertError'),
   formAlertErrorMsg: document.getElementById('formAlertErrorMsg'),
+  formAlertEvent: document.getElementById('formAlertEvent'),
+  formAlertEventMsg: document.getElementById('formAlertEventMsg'),
 
   // Groups
   groupFullName: document.getElementById('groupFullName'),
@@ -229,6 +231,36 @@ function applyBackgroundImage(url) {
   if (dialog) dialog.style.backgroundImage = `url("${url}")`;
 }
 
+function handleEventStatus(event) {
+  if (!event || event.isOpen) {
+    if (DOM.formAlertEvent) DOM.formAlertEvent.style.display = 'none';
+    if (DOM.btnSubmit) DOM.btnSubmit.disabled = false;
+    return;
+  }
+
+  // Sự kiện chưa mở hoặc đã kết thúc
+  if (DOM.formAlertEvent && DOM.formAlertEventMsg) {
+    DOM.formAlertEventMsg.textContent = event.message || 'Sự kiện hiện không tiếp nhận đăng ký mới.';
+    DOM.formAlertEvent.style.display = 'flex';
+  }
+
+  if (DOM.btnSubmit) {
+    DOM.btnSubmit.disabled = true;
+    const defaultText = DOM.btnSubmit.querySelector('.btn-text-default');
+    if (defaultText) {
+      defaultText.textContent = event.status === 'upcoming' ? 'Chưa đến thời gian bắt đầu' : 'Sự kiện đã kết thúc';
+    }
+  }
+
+  // Vô hiệu hóa các ô nhập liệu khi sự kiện chưa mở hoặc đã kết thúc
+  [DOM.fullName, DOM.phone, DOM.address, DOM.facebookName, DOM.luckyNumber].forEach(input => {
+    if (input) input.disabled = true;
+  });
+  document.querySelectorAll('input[name="memberType"]').forEach(r => {
+    r.disabled = true;
+  });
+}
+
 async function initBackground() {
   const cachedBg = localStorage.getItem('app_bg_image_url');
   if (cachedBg) {
@@ -248,6 +280,11 @@ async function initBackground() {
         localStorage.removeItem('app_bg_image_url');
         document.documentElement.style.removeProperty('--custom-bg-image');
         document.body.style.backgroundImage = '';
+      }
+
+      // Xử lý kiểm tra thời gian sự kiện
+      if (data.event) {
+        handleEventStatus(data.event);
       }
     }
   } catch (_) {}

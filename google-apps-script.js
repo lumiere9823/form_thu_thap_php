@@ -9,11 +9,26 @@
 var EVENT_CLOSED = false;
 var EVENT_CLOSED_MESSAGE = "Sự kiện đã đóng và kết thúc, hệ thống không còn tiếp nhận đăng ký mới.";
 
+// Tên trang tính (tab) dành riêng để lưu dữ liệu minigame
+var TARGET_SHEET_NAME = "Data_minigame";
+
+// Hàm lấy đúng trang tính Data_minigame (tự động tạo tab nếu chưa có)
+function getTargetSheet(doc) {
+  if (!doc) {
+    doc = SpreadsheetApp.getActiveSpreadsheet();
+  }
+  if (!doc) return null;
+  var sheet = doc.getSheetByName(TARGET_SHEET_NAME);
+  if (!sheet) {
+    sheet = doc.insertSheet(TARGET_SHEET_NAME);
+  }
+  return sheet;
+}
+
 // Hàm khởi tạo tiêu đề cột nếu sheet còn trống (Có thể bấm "Chạy" trực tiếp trong Apps Script)
 function setupSheet(sheet) {
   if (!sheet) {
-    var doc = SpreadsheetApp.getActiveSpreadsheet();
-    sheet = doc ? doc.getActiveSheet() : null;
+    sheet = getTargetSheet();
   }
   if (!sheet) {
     Logger.log("Không tìm thấy bảng tính Google Sheet đang hoạt động!");
@@ -125,7 +140,7 @@ function doPost(e) {
     if (!doc) {
       throw new Error("Vui lòng mở Apps Script từ bên trong Google Sheets (Tiện ích mở rộng > Apps Script) để tự động liên kết bảng tính!");
     }
-    var sheet = doc.getActiveSheet();
+    var sheet = getTargetSheet(doc);
     setupSheet(sheet);
 
     var data = {};
@@ -243,8 +258,8 @@ function doGet(e) {
       .setMimeType(ContentService.MimeType.JSON);
   }
   if (params.action === "checkDuplicate") {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    var message = findDuplicate(sheet, params.phone);
+    var sheet = getTargetSheet();
+    var message = sheet ? findDuplicate(sheet, params.phone) : "";
     var result = JSON.stringify({ status: message ? "duplicate" : "available", message: message });
     var callback = String(params.callback || "");
     if (/^[A-Za-z_$][\w$]*$/.test(callback)) {

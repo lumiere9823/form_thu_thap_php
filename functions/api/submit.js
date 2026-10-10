@@ -1,3 +1,5 @@
+import { checkEventStatus } from './eventUtils.js';
+
 // Rate limiting cache (in-memory per Cloudflare edge worker instance)
 const rateLimits = new Map();
 
@@ -16,7 +18,20 @@ function isRateLimited(ip, maxRequests = 8, windowMs = 10 * 60 * 1000) {
 }
 
 export async function onRequestPost({ request, env }) {
-  // 1. Rate limiting by IP
+  // 1. Kiểm tra thời gian sự kiện (wrangler.toml hoặc Cloudflare Dashboard)
+  const eventStatus = checkEventStatus(env);
+  if (!eventStatus.isOpen) {
+    return new Response(
+      JSON.stringify({
+        status: 'error',
+        code: 'EVENT_CLOSED',
+        message: eventStatus.message
+      }),
+      { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
+    );
+  }
+
+  // 2. Rate limiting by IP
   const clientIp = request.headers.get('cf-connecting-ip') || 'unknown';
   if (isRateLimited(clientIp, 8, 10 * 60 * 1000)) {
     return new Response(
