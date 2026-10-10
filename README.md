@@ -35,6 +35,7 @@ Trong Cloudflare Dashboard (dự án `formthongtin`):
    - `GOOGLE_SHEET_WEBHOOK_URL`: URL Web App của Google Apps Script (dạng `https://script.google.com/macros/s/.../exec`).
    - `GOOGLE_SHEET_SHARED_SECRET`: Chuỗi khóa bí mật đối soát (nếu có dùng).
    - `BACKGROUND_IMAGE_URL`: *(Tùy chọn)* Link ảnh nền trực tiếp hoặc link Google Drive (hệ thống tự động chuyển đổi sang CDN Google). Nếu để trống, hệ thống sử dụng màu nền gradient tối mặc định.
+   - `TEXT_THEME`: *(Tùy chọn)* Chế độ màu chữ: `"dark"` (màu chữ tối/đậm cho nền sáng/vàng) hoặc `"light"` (màu chữ trắng/sáng cho nền tối). Mặc định là `"light"`.
    - `EVENT_START_DATE`: *(Tùy chọn)* Ngày bắt đầu nhận đăng ký (VD: `12/10/2026`).
    - `EVENT_END_DATE`: *(Tùy chọn)* Ngày kết thúc sự kiện (VD: `16/10/2026` - tự động tính đến hết 23:59:59 của ngày đó).
    > **Lưu ý:** Nếu không cấu hình hoặc để trống cả 2 biến này, hệ thống sẽ mở nhận đăng ký mãi mãi không giới hạn thời gian.

@@ -261,6 +261,22 @@ function handleEventStatus(event) {
   });
 }
 
+function applyTextTheme(theme) {
+  if (theme === 'dark') {
+    document.body.classList.add('theme-dark-text');
+    document.documentElement.classList.add('theme-dark-text');
+  } else {
+    document.body.classList.remove('theme-dark-text');
+    document.documentElement.classList.remove('theme-dark-text');
+  }
+}
+
+// Khôi phục theme màu chữ đã lưu để hiển thị ngay lập tức không bị nháy
+const cachedTextTheme = localStorage.getItem('app_text_theme');
+if (cachedTextTheme) {
+  applyTextTheme(cachedTextTheme);
+}
+
 async function initBackground() {
   const cachedBg = localStorage.getItem('app_bg_image_url');
   if (cachedBg) {
@@ -280,6 +296,12 @@ async function initBackground() {
         localStorage.removeItem('app_bg_image_url');
         document.documentElement.style.removeProperty('--custom-bg-image');
         document.body.style.backgroundImage = '';
+      }
+
+      // Áp dụng cấu hình màu chữ (dark: chữ tối trên nền sáng | light: chữ sáng trên nền tối)
+      if (data.textTheme) {
+        localStorage.setItem('app_text_theme', data.textTheme);
+        applyTextTheme(data.textTheme);
       }
 
       // Xử lý kiểm tra thời gian sự kiện

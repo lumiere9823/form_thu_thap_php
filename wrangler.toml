@@ -8,7 +8,12 @@ directory = "public"
 binding = "ASSETS"
 
 [vars]
-BACKGROUND_IMAGE_URL = "https://lh3.googleusercontent.com/d/1Ler6x8p96gZ7T0eeX6oMQofbEWNEgEge"
+BACKGROUND_IMAGE_URL = "https://drive.google.com/file/d/1yv_7gpcnbDxj46ft0i7ipsGt7cAWc14t/view?usp=sharing"
+
+# Chế độ màu chữ hiển thị (Linh hoạt khi đổi ảnh nền):
+# - "dark"  : Chữ màu tối/đậm (khuyên dùng khi ảnh nền sáng/vàng như hiện tại để rõ nét, tương phản cao)
+# - "light" : Chữ màu trắng/sáng (mặc định, dùng khi ảnh nền tối/ban đêm)
+TEXT_THEME = "dark"
 
 # Cấu hình thời gian diễn ra sự kiện (Định dạng: DD/MM/YYYY hoặc YYYY-MM-DD)
 # Bắt đầu từ 12/10/2026 đến hết ngày 16/10/2026.
